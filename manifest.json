@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.unr3leas3d.steam-recent",
+  "name": "Steam",
+  "version": "1.0.0",
+  "author": "Unr3leas3d",
+  "license": "MIT",
+  "description": "Recently played Steam games, one click from the bar",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Steam",
+    "description": "Recently played Steam games with cover art, newest first",
+    "category": "Games",
+    "defaultSection": "right",
+    "allowMultiple": false
+  },
+  "homepage": "https://github.com/Unr3leas3d/omarchy-steam-recent",
+  "repository": "https://github.com/Unr3leas3d/omarchy-steam-recent"
+}
