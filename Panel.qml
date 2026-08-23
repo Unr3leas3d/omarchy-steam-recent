@@ -50,8 +50,16 @@ Panel {
     controller.show()
   }
 
+  // The appid lands in a shell command, and it came out of a file any local
+  // process can write. It is checked in the provider and again in parseRows;
+  // this is the last gate before execution, sited at the concatenation itself
+  // so the check cannot drift away from the thing it protects.
   function launch(row) {
     if (!row || !bar) return
+    if (!Model.isLaunchableAppid(row.appid)) {
+      console.warn("steam-recent: refusing to launch non-numeric appid:", row.appid)
+      return
+    }
     bar.run("uwsm-app -- steam steam://rungameid/" + row.appid)
     close()
   }

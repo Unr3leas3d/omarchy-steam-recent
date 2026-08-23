@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.unr3leas3d.steam-recent",
   "name": "Steam",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Unr3leas3d",
   "license": "MIT",
   "description": "Recently played Steam games, one click from the bar",

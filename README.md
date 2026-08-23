@@ -95,6 +95,21 @@ Only installed games are listed. Proton, the Steam Linux Runtimes, and the
 redistributables live in `steamapps` alongside real games and are filtered out
 by name, because the manifests carry no field that distinguishes them.
 
+## Security
+
+Every field the panel shows comes from a file that any local process can
+rewrite — `steamapps/*.acf` is not privileged — and the appid ends up
+concatenated into a shell command when a row is launched. So it is validated
+as a short run of digits three times over: in the provider, again when the
+panel parses the provider's output, and once more at the concatenation
+itself. Anything that is not digits is dropped, never escaped.
+
+Sizes are bounded at every stage, so a corrupt or hostile file cannot hand
+the long-lived shell process an unbounded string: 1 MiB per manifest, 32 MiB
+per `localconfig.vdf`, 4096 bytes per line, 2000 manifests, 200 characters
+per game name, and 64 KiB of total output. Names are stripped of tabs and
+control characters before they share a tab-delimited line with an appid.
+
 ## Requirements
 
 Bash, `awk` (gawk, the Arch default — the parser uses `match()` with a

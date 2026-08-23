@@ -2,26 +2,42 @@
 // the panel stays a thin view over them and they can be reasoned about (and
 // linted) on their own.
 
+// An appid is concatenated into a shell command when a row is launched, and
+// it originates in steamapps/*.acf, which any local process can rewrite. The
+// provider already drops non-numeric ids; this is the second, independent
+// check, so a compromised or swapped-out provider still cannot reach the
+// shell with metacharacters.
+var APPID = /^[0-9]{1,12}$/
+
 // The provider emits TSV rather than JSON: game names arrive verbatim from
 // Steam and routinely carry quotes, colons and unicode, none of which have
 // to be escaped or unescaped when the separator is a tab.
 function parseRows(text) {
   var rows = []
   var lines = String(text || "").split("\n")
-  for (var i = 0; i < lines.length; i++) {
+  // Bounded so a runaway provider cannot grow this array without limit.
+  for (var i = 0; i < lines.length && rows.length < 64; i++) {
     var line = lines[i]
-    if (!line) continue
+    if (!line || line.length > 4096) continue
     var parts = line.split("\t")
-    if (parts.length < 4 || !parts[0] || !parts[1]) continue
+    if (parts.length < 4) continue
+    if (!APPID.test(parts[0])) continue
+    var name = String(parts[1] || "")
+    if (!name) continue
+    if (name.length > 200) name = name.substring(0, 200)
     rows.push({
       appid: parts[0],
-      name: parts[1],
+      name: name,
       played: Number(parts[2]) || 0,
       minutes: Number(parts[3]) || 0,
       cover: parts[4] || ""
     })
   }
   return rows
+}
+
+function isLaunchableAppid(appid) {
+  return APPID.test(String(appid || ""))
 }
 
 // Calendar days apart, not elapsed 24h blocks: something played at 23:00 is
