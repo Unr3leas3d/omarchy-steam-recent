@@ -1,16 +1,36 @@
 # Steam — Omarchy bar widget
 
-Your recently played Steam games, one click from the bar.
+A shortlist of the games you actually play, one click from the bar.
 
 ![The panel, open](preview.png)
 
-A Steam mark sits in the bar. Clicking it drops a list of the games you
-actually play — most recent first, with the cover art Steam has already
-cached on disk, when you last played, and how long you've played. Clicking a
-game launches it and closes the panel.
+This is not a library browser. Clicking the Steam mark drops the few games you
+played most recently — cover art, when you last played, how long you have
+played — and clicking one launches it. There is no search box and no grid,
+because at five rows there is nothing to search: the game you want is almost
+always the one you played last.
 
-Everything is read from files Steam already keeps locally. No API key, no
-network call, no account login, and nothing is sent anywhere.
+Everything is read from files Steam already keeps on disk, so the panel opens
+instantly whether or not Steam is running. No API key, no network call, no
+account login, and nothing leaves your machine.
+
+## Scope, and when to use something else
+
+The whole design is one decision — show a handful of rows and get out of the
+way. That makes it fast and predictable, and it makes it the wrong tool for
+some jobs. The Omarchy marketplace has plugins that cover those better:
+
+| If you want | Use |
+|---|---|
+| Type-to-search over the whole library, and non-Steam games | [thedarkcr0w/omarchy-games](https://github.com/thedarkcr0w/omarchy-games) |
+| One list spanning Steam, Lutris, Heroic, Bottles, and Flatpak | [sir-francisdrake/game-launcher](https://github.com/sir-francisdrake/game-launcher) |
+| Steam friends presence rather than launching | [daventhedude/omarchy-steam-friends](https://github.com/daventhedude/omarchy-steam-friends) |
+
+This one stays deliberately small: Steam only, installed games only, capped at
+twelve rows, no search, no aggregation. Staying small buys two things — a panel
+where the game you want is already on screen, with nothing to type and nothing
+to scroll, and a provider written in bash and awk, so the plugin adds no
+language runtime to the long-lived shell process it lives inside.
 
 ## Install
 
