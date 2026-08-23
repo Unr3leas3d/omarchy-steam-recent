@@ -104,11 +104,17 @@ as a short run of digits three times over: in the provider, again when the
 panel parses the provider's output, and once more at the concatenation
 itself. Anything that is not digits is dropped, never escaped.
 
-Sizes are bounded at every stage, so a corrupt or hostile file cannot hand
-the long-lived shell process an unbounded string: 1 MiB per manifest, 32 MiB
-per `localconfig.vdf`, 4096 bytes per line, 2000 manifests, 200 characters
-per game name, and 64 KiB of total output. Names are stripped of tabs and
-control characters before they share a tab-delimited line with an appid.
+Work and memory are bounded at every stage, so neither scales with what is
+sitting in the Steam tree. Nothing there is privileged, so all of it is
+treated as attacker-controlled: 8 accounts, 2000 manifests, 20000 playtime
+records, 25000 rows into aggregation or sort, 1 MiB per manifest, 32 MiB per
+`localconfig.vdf`, 4096 bytes per line, 200 characters per game name, and
+64 KiB of total output. Overflow past any ceiling is rejected rather than
+queued. Names are stripped of tabs and control characters before they share
+a tab-delimited line with an appid.
+
+A tree built to be hostile — 400 accounts holding 800,000 playtime records —
+runs in 0.5s and 14 MB, against 20.3s and 440 MB before these ceilings.
 
 ## Requirements
 
